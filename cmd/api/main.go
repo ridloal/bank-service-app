@@ -4,10 +4,14 @@ import (
 	"bank-service-app/internal/delivery/http"
 	"bank-service-app/internal/repository"
 	"bank-service-app/internal/usecase"
+	"bank-service-app/pkg/config"
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -15,21 +19,23 @@ import (
 )
 
 func main() {
+	// Load configuration
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Fatal("Failed to load config:", err)
+	}
+
 	// Database connection
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbUser := os.Getenv("DB_USER")
-	dbPass := os.Getenv("DB_PASSWORD")
-	dbName := os.Getenv("DB_NAME")
-
-	dbURL := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		dbHost, dbPort, dbUser, dbPass, dbName)
-
-	db, err := sql.Open("postgres", dbURL)
+	db, err := sql.Open("postgres", cfg.Database.GetDSN())
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 	defer db.Close()
+
+	// Test database connection
+	if err := db.Ping(); err != nil {
+		log.Fatal("Failed to ping database:", err)
+	}
 
 	// Repository
 	nasabahRepo := repository.NewPostgresNasabahRepository(db)
@@ -50,6 +56,25 @@ func main() {
 	// Register handlers
 	http.NewNasabahHandler(e, nasabahUsecase, transaksiUsecase)
 
-	// Start server
-	e.Logger.Fatal(e.Start(":8080"))
+	// Server configuration
+	serverAddr := fmt.Sprintf("%s:%s", cfg.Server.Host, cfg.Server.Port)
+
+	// Start server with graceful shutdown
+	go func() {
+		if err := e.Start(serverAddr); err != nil {
+			log.Printf("Shutting down the server: %v", err)
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
+	<-quit
+
+	ctx, cancel := context.WithTimeout(context.Background(), cfg.Server.GracefulTimeout)
+	defer cancel()
+
+	if err := e.Shutdown(ctx); err != nil {
+		log.Fatal("Failed to gracefully shutdown the server:", err)
+	}
 }

@@ -1,0 +1,19 @@
+CREATE TABLE nasabah (
+    id SERIAL PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    nik VARCHAR(16) UNIQUE NOT NULL,
+    no_hp VARCHAR(15) UNIQUE NOT NULL,
+    no_rekening VARCHAR(10) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE transaksi (
+    id SERIAL PRIMARY KEY,
+    nasabah_id INT NOT NULL,
+    jenis_transaksi VARCHAR(10) NOT NULL, -- 'DEBIT' atau 'CREDIT'
+    nominal DECIMAL(15,2) NOT NULL,
+    saldo_akhir DECIMAL(15,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (nasabah_id) REFERENCES nasabah(id)
+);

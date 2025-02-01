@@ -2,56 +2,67 @@ package main
 
 import (
 	"bank-service-app/internal/delivery/http"
+	"bank-service-app/internal/delivery/http/middleware"
 	"bank-service-app/internal/repository"
 	"bank-service-app/internal/usecase"
 	"bank-service-app/pkg/config"
+	"bank-service-app/pkg/logger"
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	echomiddleware "github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
 )
 
 func main() {
+	// Initialize logger
+	log := logger.NewLogger()
+	defer log.Sync()
+
 	// Load configuration
 	cfg, err := config.LoadConfig()
 	if err != nil {
-		log.Fatal("Failed to load config:", err)
+		log.ErrorWithContext("Failed to load config", err)
+		os.Exit(1)
 	}
 
 	// Database connection
 	db, err := sql.Open("postgres", cfg.Database.GetDSN())
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.ErrorWithContext("Failed to connect to database", err)
+		os.Exit(1)
 	}
 	defer db.Close()
 
 	// Test database connection
 	if err := db.Ping(); err != nil {
-		log.Fatal("Failed to ping database:", err)
+		log.ErrorWithContext("Failed to ping database", err)
+		os.Exit(1)
 	}
 
+	log.InfoWithContext("Successfully connected to database")
+
 	// Repository
-	nasabahRepo := repository.NewPostgresNasabahRepository(db)
-	transaksiRepo := repository.NewPostgresTransaksiRepository(db)
+	nasabahRepo := repository.NewPostgresNasabahRepository(db, log)
+	transaksiRepo := repository.NewPostgresTransaksiRepository(db, log)
 
 	// Usecase
-	nasabahUsecase := usecase.NewNasabahUsecase(nasabahRepo, transaksiRepo)
-	transaksiUsecase := usecase.NewTransaksiUsecase(nasabahRepo, transaksiRepo)
+	nasabahUsecase := usecase.NewNasabahUsecase(nasabahRepo, transaksiRepo, log)
+	transaksiUsecase := usecase.NewTransaksiUsecase(nasabahRepo, transaksiRepo, log)
 
 	// Echo instance
 	e := echo.New()
 
 	// Middleware
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
+	e.Use(echomiddleware.Recover())
+	e.Use(echomiddleware.CORS())
+	e.Use(echomiddleware.RequestID())
+	e.Use(middleware.RequestLogger(log))
 
 	// Register handlers
 	http.NewNasabahHandler(e, nasabahUsecase, transaksiUsecase)
@@ -62,7 +73,7 @@ func main() {
 	// Start server with graceful shutdown
 	go func() {
 		if err := e.Start(serverAddr); err != nil {
-			log.Printf("Shutting down the server: %v", err)
+			log.InfoWithContext("Shutting down the server")
 		}
 	}()
 
@@ -75,6 +86,6 @@ func main() {
 	defer cancel()
 
 	if err := e.Shutdown(ctx); err != nil {
-		log.Fatal("Failed to gracefully shutdown the server:", err)
+		log.ErrorWithContext("Failed to gracefully shutdown the server", err)
 	}
 }

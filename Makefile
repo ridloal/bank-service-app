@@ -35,3 +35,7 @@ status:
 # Restart services
 restart:
 	docker-compose restart
+
+# Run tests
+test:
+	go test -v ./... -cover

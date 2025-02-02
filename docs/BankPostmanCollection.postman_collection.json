@@ -1,0 +1,441 @@
+{
+	"info": {
+		"_postman_id": "4575434c-d8e7-40a6-ad17-60a2ce06e2fc",
+		"name": "Bank Service API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15911180"
+	},
+	"item": [
+		{
+			"name": "Registrasi Nasabah",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nama\": \"John Doe\",\n    \"nik\": \"1234567890123456\",\n    \"no_hp\": \"081234567890\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/daftar",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"daftar"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8080/daftar \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"nama\": \"John Doe\",\n    \"nik\": \"1234567890123456\",\n    \"no_hp\": \"081234567890\"\n  }'"
+			},
+			"response": [
+				{
+					"name": "Registrasi Nasabah Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"John Doe\",\n    \"nik\": \"1234567890123456\",\n    \"no_hp\": \"081234567890\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://festivals-colour-ann-instrumentation.trycloudflare.com/daftar",
+							"protocol": "https",
+							"host": [
+								"festivals-colour-ann-instrumentation",
+								"trycloudflare",
+								"com"
+							],
+							"path": [
+								"daftar"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"no_rekening\": \"0439895396\"\r\n}"
+				},
+				{
+					"name": "Registrasi Nasabah Failed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nama\": \"John Doe\",\n    \"nik\": \"1234567890123456\",\n    \"no_hp\": \"081234567890\"\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://festivals-colour-ann-instrumentation.trycloudflare.com/daftar",
+							"protocol": "https",
+							"host": [
+								"festivals-colour-ann-instrumentation",
+								"trycloudflare",
+								"com"
+							],
+							"path": [
+								"daftar"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"remark\": \"NIK sudah terdaftar\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Menabung (Deposit)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"no_rekening\": \"0706674316\",\n    \"nominal\": 100000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/tabung",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tabung"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8080/tabung \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"no_rekening\": \"1234567890\",\n    \"nominal\": 100000\n  }'"
+			},
+			"response": [
+				{
+					"name": "Menabung (Deposit) Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"no_rekening\": \"0706674316\",\n    \"nominal\": 100000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://festivals-colour-ann-instrumentation.trycloudflare.com/tabung",
+							"protocol": "https",
+							"host": [
+								"festivals-colour-ann-instrumentation",
+								"trycloudflare",
+								"com"
+							],
+							"path": [
+								"tabung"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"saldo\": 100000\r\n}"
+				},
+				{
+					"name": "Menabung (Deposit) Failed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"no_rekening\": \"0706674316\",\n    \"nominal\": 100000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/tabung",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tabung"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"remark\": \"nomor rekening tidak ditemukan\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Menarik (Withdrawal)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"no_rekening\": \"0706674316\",\r\n    \"nominal\": 50000\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/tarik",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"tarik"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8080/tarik \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\r\n    \"no_rekening\": \"1234567890\",\r\n    \"nominal\": 50000\r\n  }'"
+			},
+			"response": [
+				{
+					"name": "Menarik (Withdrawal) Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"no_rekening\": \"0706674316\",\r\n    \"nominal\": 50000\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://festivals-colour-ann-instrumentation.trycloudflare.com/tarik",
+							"protocol": "https",
+							"host": [
+								"festivals-colour-ann-instrumentation",
+								"trycloudflare",
+								"com"
+							],
+							"path": [
+								"tarik"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"saldo\": 150000\r\n}"
+				},
+				{
+					"name": "Menarik (Withdrawal)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"no_rekening\": \"0706674316\",\r\n    \"nominal\": 50000\r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/tarik",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"tarik"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"remark\": \"saldo tidak mencukupi\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Cek Saldo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/saldo/0706674316",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"saldo",
+						"0706674316"
+					]
+				},
+				"description": "Generated from cURL: curl http://localhost:8080/saldo/1234567890"
+			},
+			"response": [
+				{
+					"name": "Cek Saldo Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://festivals-colour-ann-instrumentation.trycloudflare.com/saldo/0706674316",
+							"protocol": "https",
+							"host": [
+								"festivals-colour-ann-instrumentation",
+								"trycloudflare",
+								"com"
+							],
+							"path": [
+								"saldo",
+								"0706674316"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"saldo\": 150000\r\n}"
+				},
+				{
+					"name": "Cek Saldo Failed",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/saldo/0706674316",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"saldo",
+								"0706674316"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"remark\": \"nomor rekening tidak ditemukan\"\r\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://festivals-colour-ann-instrumentation.trycloudflare.com",
+			"type": "default"
+		},
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
